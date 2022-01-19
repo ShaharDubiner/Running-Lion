@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Assignment 4: Lighting</title>
+		
+		<style type="text/css">
+			:root{
+				--borderColor: #CC9900;
+				--uiColor: #DDDDDD;
+				--uiHoverColor: #BBBBBB;
+				--uiClickColor: #FFFF00;
+				--borderStyle: groove;
+			}
+			body{
+				display: flex;
+				flex-direction: row;
+				width: 800px;
+				margin: auto;
+				margin-top: 25px;
+			}
+			#canvasDiv{
+				display: inline;
+				width: 400px;
+				padding: 5px 15px 5px 15px;
+				margin: auto;
+			}
+			#canvas{
+				border: 5px var(--borderStyle) var(--borderColor);
+			}
+			.controlsDiv{
+				display: inline;
+				width: 180px;
+				padding: 15px 0px 5px 0px;
+			}
+			#controlsLeftDiv{ float: right; }
+			#controlsRightDiv{ float: left; }
+			input:focus{ outline: none; box-shadow: 0 0 25px #FFFF00; }
+			.radio,
+			.radioText{
+				float: left;
+			}
+			.button:focus{ outline: none; box-shadow: 0 0 25px #FFFF00; }
+			.button{
+				cursor: pointer;
+				border-radius: 25%;
+				border: 3px var(--borderStyle) var(--borderColor);
+				-webkit-transition: 0.4s;
+				   -moz-transition: 0.4s;
+				    -ms-transition: 0.4s;
+				     -o-transition: 0.4s;
+				        transition: 0.4s;
+				transition-duration: 0.4s;
+				background-color: var(--uiColor);
+				background: var(--uiColor);
+				vertical-align: middle
+			}
+			.button:hover:enabled{
+				background-color: var(--uiHoverColor);
+				background: var(--uiHoverColor);
+			}
+			.button:active:enabled{
+				background-color: var(--uiClickColor);
+				background: var(--uiClickColor);
+			}
+			.button:disabled{
+				cursor: not-allowed;
+			}
+			#defaultsButton{
+				width: 85%;
+				height: 50px;
+				font-size: 20px;
+			}
+			.slider{
+				-webkit-appearance: none;
+				cursor: pointer;
+				width: 120px;
+				height: 15px;
+				margin: 0px 0px 0px 0px;
+				border-radius: 10px;
+				border: 3px var(--borderStyle) var(--borderColor);
+				background-color: var(--uiColor);
+				background: var(--uiColor);
+				opacity: 0.75;
+				-webkit-transition: 0.4s;
+				   -moz-transition: 0.4s;
+				    -ms-transition: 0.4s;
+				     -o-transition: 0.4s;
+				        transition: 0.4s;
+				transition-duration: 0.4s;
+				vertical-align: middle;
+			}
+			.slider:hover{
+				background-color: var(--uiHoverColor);
+				background: var(--uiHoverColor);
+			}
+			.slider::-webkit-slider-thumb{
+				-webkit-appearance: none;
+				cursor: pointer;
+				width: 13px;
+				height: 13px;
+				background-color: #FFFFFF;
+				background: #FFFFFF;
+				border-radius: 50%;
+				border: 1px solid var(--uiColor);
+			}
+			.slider::-moz-range-thumb{
+				-webkit-appearance: none;
+				cursor: pointer;
+				width: 13px;
+				height: 13px;
+				background-color: #FFFFFF;
+				background: #FFFFFF;
+				border-radius: 50%;
+				border: 1px solid var(--uiColor);
+			}
+			.slider::-ms-slider-thumb{
+				-webkit-appearance: none;
+				cursor: pointer;
+				width: 13px;
+				height: 13px;
+				background-color: #FFFFFF;
+				background: #FFFFFF;
+				border-radius: 50%;
+				border: 1px solid var(--uiColor);
+			}
+			.slider::-o-slider-thumb{
+				-webkit-appearance: none;
+				cursor: pointer;
+				width: 13px;
+				height: 13px;
+				background-color: #FFFFFF;
+				background: #FFFFFF;
+				border-radius: 50%;
+				border: 1px solid var(--uiColor);
+			}
+			.slider::slider-thumb{
+				-webkit-appearance: none;
+				cursor: pointer;
+				width: 13px;
+				height: 13px;
+				background-color: #FFFFFF;
+				background: #FFFFFF;
+				border-radius: 50%;
+				border: 1px solid var(--uiColor);
+			}
+			.slider::-webkit-slider-runnable-track{
+				background-color: var(--uiColor);
+				background: var(--uiColor);
+				height: 2px;
+				margin-left: 2px;
+				margin-right: 2px;
+			}
+			.slider:active{
+				background-color: var(--uiClickColor);
+				background: var(--uiClickColor);
+			}
+			.numInput{
+				width: 40px;
+				height: 15px;
+				margin: 0px 0px 0px 0px;
+				background-color: var(--uiColor);
+				background: var(--uiColor);
+				color: #333333;
+				-webkit-transition: 0.4s;
+				   -moz-transition: 0.4s;
+				    -ms-transition: 0.4s;
+				     -o-transition: 0.4s;
+				        transition: 0.4s;
+				transition-duration: 0.4s;
+				vertical-align: middle
+			}
+			.numInput:hover{
+				background-color: var(--uiHoverColor);
+				background: var(--uiHoverColor);
+				color: #000000;
+			}
+			.numInput::-webkit-inner-spin-button,
+			.numInput::-webkit-outer-spin-button{
+				opacity: 1;
+			}
+			._red{
+				background-color: #FF0000;
+				background: #FF0000;
+				color: #FFFFFF;
+			}
+			._red.slider{
+				background-color: #000000;
+				background-image: linear-gradient(to right, #000000, #FF0000);
+				background: -webkit-linear-gradient(to right, #000000, #FF0000);
+				background:    -moz-linear-gradient(to right, #000000, #FF0000);
+				background:     -ms-linear-gradient(to right, #000000, #FF0000);
+				background:      -o-linear-gradient(to right, #000000, #FF0000);
+				background:         linear-gradient(to right, #000000, #FF0000);
+			}
+			._red:hover{
+				background-color: #DD0000;
+				background: #DD0000;
+				color: #DDDDDD;
+			}
+			._red.slider:hover{
+				background-color: #000000;
+				background-image: linear-gradient(to right, #000000, #DD0000);
+				background: -webkit-linear-gradient(to right, #000000, #DD0000);
+				background:    -moz-linear-gradient(to right, #000000, #DD0000);
+				background:     -ms-linear-gradient(to right, #000000, #DD0000);
+				background:      -o-linear-gradient(to right, #000000, #DD0000);
+				background:         linear-gradient(to right, #000000, #DD0000);
+			}
+			._green{
+				background-color: #00FF00;
+				background: #00FF00;
+				color: #333333;
+			}
+			._green.slider{
+				background-color: #000000;
+				background-image: linear-gradient(to right, #000000, #00FF00);
+				background: -webkit-linear-gradient(to right, #000000, #00FF00);
+				background:    -moz-linear-gradient(to right, #000000, #00FF00);
+				background:     -ms-linear-gradient(to right, #000000, #00FF00);
+				background:      -o-linear-gradient(to right, #000000, #00FF00);
+				background:         linear-gradient(to right, #000000, #00FF00);
+			}
+			._green:hover{
+				background-color: #00DD00;
+				background: #00DD00;
+				color: #000000;
+			}
+			._green.slider:hover{
+				background-color: #000000;
+				background-image: linear-gradient(to right, #000000, #00DD00);
+				background: -webkit-linear-gradient(to right, #000000, #00DD00);
+				background:    -moz-linear-gradient(to right, #000000, #00DD00);
+				background:     -ms-linear-gradient(to right, #000000, #00DD00);
+				background:      -o-linear-gradient(to right, #000000, #00DD00);
+				background:         linear-gradient(to right, #000000, #00DD00);
+			}
+			._blue{
+				background-color: #0000FF;
+				background: #0000FF;
+				color: #DDDDDD;
+			}
+			._blue.slider{
+				background-color: #000000;
+				background-image: linear-gradient(to right, #000000, #0000FF);
+				background: -webkit-linear-gradient(to right, #000000, #0000FF);
+				background:    -moz-linear-gradient(to right, #000000, #0000FF);
+				background:     -ms-linear-gradient(to right, #000000, #0000FF);
+				background:      -o-linear-gradient(to right, #000000, #0000FF);
+				background:         linear-gradient(to right, #000000, #0000FF);
+			}
+			._blue:hover{
+				background-color: #000066;
+				background: #000066;
+				color: #BBBBBB;
+			}
+			._blue.slider:hover{
+				background-color: #000000;
+				background-image: linear-gradient(to right, #000000, #000066);
+				background: -webkit-linear-gradient(to right, #000000, #000066);
+				background:    -moz-linear-gradient(to right, #000000, #000066);
+				background:     -ms-linear-gradient(to right, #000000, #000066);
+				background:      -o-linear-gradient(to right, #000000, #000066);
+				background:         linear-gradient(to right, #000000, #000066);
+			}
+			.colorDisplay{
+				position: inline;
+				width: 100px;
+				height: 100px;
+				border-radius: 50px;
+				background-color: #000000;
+				background: #000000;
+				margin: auto;
+				margin-top: 15px;
+				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+			}
+			.colorPicker{
+				cursor: pointer;
+				position: absolute;
+				width: 35px;
+				height: 35px;
+				-webkit-transform: translate(72px, 48px);
+				   -moz-transform: translate(72px, 48px);
+				    -ms-transform: translate(72px, 48px);
+				     -o-transform: translate(72px, 48px);
+				        transform: translate(72px, 48px);
+				padding: 0px 0px 0px 0px;
+				z-index: 10;
+			}
+			.switch{
+				position: relative;
+				display: inline-block;
+				width: 40%;
+				height: 25px;
+			}
+			.switch input{ opacity: 0; width: 0; height: 0; }
+			.switchSlider{
+				position: absolute;
+				cursor: pointer;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background-color: #000000;
+				background: #000000;
+				-webkit-transition: 0.4s;
+				   -moz-transition: 0.4s;
+				    -ms-transition: 0.4s;
+				     -o-transition: 0.4s;
+				        transition: 0.4s;
+				transition-duration: 0.4s;
+				border-radius: 25px;
+				border: 3px var(--borderStyle) var(--borderColor);
+			}
+			.switchSlider:before{
+				position: absolute;
+				content: "";
+				height: 15px; width: 15px; left: 4px; bottom: 3px;
+				background-color: #FFAA00;
+				background: #FFAA00;
+				-webkit-transition: 0.4s;
+				   -moz-transition: 0.4s;
+				    -ms-transition: 0.4s;
+				     -o-transition: 0.4s;
+				        transition: 0.4s;
+				transition-duration: 0.4s;
+				border-radius: 50%;
+			}
+			input:checked + .switchSlider{
+				background-color: #FFFFFF;
+				background: #FFFFFF;
+			}
+			input:checked + .switchSlider:before{
+				-webkit-transform: translateX(300%);
+				   -moz-transform: translateX(300%);
+				    -ms-transform: translateX(300%);
+				     -o-transform: translateX(300%);
+				        transform: translateX(300%);
+			}
+			input:focus + .switchSlider{ box-shadow: 0 0 25px #FFFF00; }
+			#diffuseSwitchSun{ float: left; }
+			#specularSwitchSun{ float: right; }
+			
+			@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:0.001dpcm){
+				.slider,
+				.switchSlider{
+					border: 2px var(--borderStyle) var(--borderColor);
+				}
+				.colorPicker{
+					-webkit-transform: translate(-18px, 48px);
+				}
+				.slider::-webkit-slider-thumb{
+					margin-top: -5px;
+				}
+			}
+		</style>
+		
+		<script language="javascript" type="text/javascript" src="../lib/webgl-utils.js"></script>
+		<script language="javascript" type="text/javascript" src="../lib/webgl-debug.js"></script>
+		<script language="javascript" type="text/javascript" src="../lib/cuon-utils.js"></script>
+		<script language="javascript" type="text/javascript" src="../lib/cuon-matrix.js"></script>
+		<script language="javascript" type="text/javascript" src="./sources/classes.js"></script>
+		<script language="javascript" type="text/javascript" src="./sources/globals.js"></script>
+		<script language="javascript" type="text/javascript" src="./sources/lighting.js"></script>
+	</head>
+	<body onload="onLoad()" align=center>
+		<div id="controlsLeftDiv" class="controlsDiv">
+			<center><b>Coloring Mode:</b></center>
+			<input type="radio" class="radio" name="colorMode" value="standard" onclick="modeSelect()" checked=true><div class="radioText">&nbspStandard</div><br>
+			<input type="radio" class="radio" name="colorMode" value="normals" onclick="modeSelect()"><div class="radioText">&nbspNormals</div><br>
+			<input type="radio" class="radio" name="colorMode" value="vertices" onclick="modeSelect()"><div class="radioText">&nbspVertices</div><br>
+			<input type="radio" class="radio" name="colorMode" value="textureMap" onclick="modeSelect()"><div class="radioText">&nbspTexture Map</div><br>
+			<center><b>Ambient Light:</b></center>
+			<input type="number" class="numInput _red" id="redNumAmbient" min="0" max="255" step="1" value="51" oninput="validity.valid||(value='51');">
+			<input type="range" class="slider _red" id="redSliderAmbient" min="0" max="255" value="51" title="Red"><br>
+			<input type="number" class="numInput _green" id="greenNumAmbient" min="0" max="255" step="1" value="51" oninput="validity.valid||(value='51');">
+			<input type="range" class="slider _green" id="greenSliderAmbient" min="0" max="255" value="51" title="Green"><br>
+			<input type="number" class="numInput _blue" id="blueNumAmbient" min="0" max="255" step="1" value="51" oninput="validity.valid||(value='51');">
+			<input type="range" class="slider _blue" id="blueSliderAmbient" min="0" max="255" value="51" title="Blue"><br>
+			<input type="color" class="colorPicker" id="colorPickerAmbient" value=#808080>
+			<div class="colorDisplay" id="colorDisplayAmbient"></div><br>
+		</div>
+		<div id="canvasDiv" align=center>
+			<canvas id="canvas" width=400 height=400>
+				Please use a browser that supports &lt;canvas&gt;
+			</canvas>
+		</div>
+		<div id="controlsRightDiv" class="controlsDiv">
+			<center><button class="button" id="defaultsButton">Defaults</button></center><br>
+			<center><b>Sun Light:</b></center>
+			&nbsp;&nbsp;Diffuse&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specular
+			<center><label class="switch" id="diffuseSwitchSun" title="Diffuse Lighting">Diffuse>
+				<input type="checkbox" id="diffuseSwitchInputSun" onclick="toggleDiffuse()" checked>
+				<span class="switchSlider"></span>
+			</label></center>
+			<center><label class="switch" id="specularSwitchSun" title="Specular Lighting">Diffuse>
+				<input type="checkbox" id="specularSwitchInputSun" onclick="toggleSpecular()" checked>
+				<span class="switchSlider"></span>
+			</label></center>
+			<br><br>
+			<input type="number" class="numInput _red" id="redNumSun" min="0" max="255" step="1" value="255" oninput="validity.valid||(value='255');">
+			<input type="range" class="slider _red" id="redSliderSun" min="0" max="255" value="255" title="Red"><br>
+			<input type="number" class="numInput _green" id="greenNumSun" min="0" max="255" step="1" value="255" oninput="validity.valid||(value='255');">
+			<input type="range" class="slider _green" id="greenSliderSun" min="0" max="255" value="255" title="Green"><br>
+			<input type="number" class="numInput _blue" id="blueNumSun" min="0" max="255" step="1" value="255" oninput="validity.valid||(value='255');">
+			<input type="range" class="slider _blue" id="blueSliderSun" min="0" max="255" value="255" title="Blue"><br>
+			<input type="color" class="colorPicker" id="colorPickerSun" value=#808080>
+			<div class="colorDisplay" id="colorDisplaySun"></div><br>
+		</div>
+	</body>
+</html>
