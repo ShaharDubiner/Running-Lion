@@ -847,6 +847,7 @@ function loadTexture(source){
 	
 	var img = new Image();
 	if(!img){ console.error('Failed to create image object.'); return null; }
+	img.crossOrigin = "anonymous";
 	img.onload = function(){
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, srcFormat, srcType, img);
