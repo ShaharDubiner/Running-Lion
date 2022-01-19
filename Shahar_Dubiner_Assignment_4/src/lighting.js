@@ -288,8 +288,8 @@ function initUIComponents(){
 //**************************************************************************************************************************************************************//
 // Load textures to be used.
 function loadTextures(){
-	textures.sky = loadTexture("./src/sky.jpg");
-	textures.rock = loadTexture("./src/rock.jpg");
+	textures.sky = loadTexture("https://github.com/ShaharDubiner/Running-Lion/blob/main/Shahar_Dubiner_Assignment_4/src/sky.jpg");
+	textures.rock = loadTexture("https://github.com/ShaharDubiner/Running-Lion/blob/main/Shahar_Dubiner_Assignment_4/src/rock.jpg");
 }
 // Create cube archtype to be used.
 function defineCube(){
