@@ -352,13 +352,13 @@
 			}
 		</style>
 		
-		<script language="javascript" type="text/javascript" src="../lib/webgl-utils.js"></script>
-		<script language="javascript" type="text/javascript" src="../lib/webgl-debug.js"></script>
-		<script language="javascript" type="text/javascript" src="../lib/cuon-utils.js"></script>
-		<script language="javascript" type="text/javascript" src="../lib/cuon-matrix.js"></script>
-		<script language="javascript" type="text/javascript" src="./sources/classes.js"></script>
-		<script language="javascript" type="text/javascript" src="./sources/globals.js"></script>
-		<script language="javascript" type="text/javascript" src="./sources/lighting.js"></script>
+		<script language="javascript" type="text/javascript" src="./lib/webgl-utils.js"></script>
+		<script language="javascript" type="text/javascript" src="./lib/webgl-debug.js"></script>
+		<script language="javascript" type="text/javascript" src="./lib/cuon-utils.js"></script>
+		<script language="javascript" type="text/javascript" src="./lib/cuon-matrix.js"></script>
+		<script language="javascript" type="text/javascript" src="./src/classes.js"></script>
+		<script language="javascript" type="text/javascript" src="./src/globals.js"></script>
+		<script language="javascript" type="text/javascript" src="./src/lighting.js"></script>
 	</head>
 	<body onload="onLoad()" align=center>
 		<div id="controlsLeftDiv" class="controlsDiv">
@@ -381,6 +381,9 @@
 			<canvas id="canvas" width=400 height=400>
 				Please use a browser that supports &lt;canvas&gt;
 			</canvas>
+			<p>[W,A,S,D]: move around</p>
+			<p>[Q,E]: Rotate left and right   [Z,X]: Rotate up and down</p>
+			<p>Or use the mouse by clicking and dragging</p>
 		</div>
 		<div id="controlsRightDiv" class="controlsDiv">
 			<center><button class="button" id="defaultsButton">Defaults</button></center><br>
